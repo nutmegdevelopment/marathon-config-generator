@@ -11,77 +11,45 @@ var (
 	templateBuffer bytes.Buffer
 	environment    string
 	verbose        bool
+	baseConfig     string
+	overlayConfig  string
 )
 
 func main() {
-
 	flag.StringVar(&environment, "env", "test", "the environment configuration to be generated.")
+	flag.StringVar(&baseConfig, "base-config", "", "the base yaml configuration.")
+	flag.StringVar(&overlayConfig, "overlay-config", "", "the yaml file configuration to be overlayed.")
 	flag.BoolVar(&verbose, "verbose", false, "verbose output.")
 	flag.Parse()
+
+	if baseConfig == "" {
+		log.Println("Required parameter missing: -base-config=...")
+		log.Fatalln("Please use -h to see more information.")
+	}
 
 	if verbose {
 		log.Printf("Generating configuration for: %s", environment)
 	}
 
-	// Put it all here for now until we know that it's working as expected.
-
-	// Config instance.
-	//app := MarathonApp{}
-
 	// Template filename.
-	//templateFile := "test-data/marathon.json"
-	baseYAML := readFile("test-data/marathon.yml")
-	overlayYAML := readFile("test-data/marathon-prod.yml")
-	//templateName := "marathon-test"
+	baseYAML := readFile(baseConfig)
 
-	// Yaml to struct.
+	// Create an instance of MarathonApp.
 	t := MarathonApp{}
-	t.ParseYAML(baseYAML)
-	t.ParseYAML(overlayYAML)
-	// err := yaml.Unmarshal([]byte(yamlFile), &t)
-	// if err != nil {
-	// 	log.Fatalf("error: %v", err)
-	// }
-	// if verbose {
-	// 	spew.Dump(t)
-	// }
 
-	// Override the defaults.
-	// err = yaml.Unmarshal([]byte(yamlFileProd), &t)
-	// if err != nil {
-	// 	log.Fatalf("error unmarshalling prod: %v", err)
-	// }
-	// if verbose {
-	// 	spew.Dump(t)
-	// }
+	// Load the base YAML configuration.
+	t.LoadYAML(baseYAML)
 
-	// Marshall it to JSON and see what we get...
-	// marathonConfig, err := json.Marshal(t)
-	// if err != nil {
-	// 	log.Fatalf("error marshalling json: %s", err.Error())
-	// }
-	// fmt.Println(string(marathonConfig))
+	// Overlay the environment specific YAML configuration if specified.
+	if overlayConfig != "" {
+		overlayYAML := readFile(overlayConfig)
+		t.LoadYAML(overlayYAML)
+	}
+
+	// Let's see what we have created!
 	log.Printf("JSON: %s", t.ToJSON())
-
-	// Read in the template.
-	//templateBody := readFile(templateFile)
-
-	// Parse the template.
-	//tmpl, err := template.New(templateName).Funcs(funcMap).Parse(templateBody)
-
-	// Execute the template.
-	//tmpl.Execute(&templateBuffer, app)
 }
 
-/*
-var funcMap = template.FuncMap{
-	"sampleFunc": sampleFunc,
-}
-
-func sampleFunc() string {
-	return ""
-}
-*/
 func readFile(filename string) string {
 	b, err := ioutil.ReadFile(filename)
 	if err != nil {

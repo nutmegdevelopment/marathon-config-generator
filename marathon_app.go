@@ -303,11 +303,11 @@ type MarathonApp struct {
 	} `yaml:"upgradeStrategy" json:"upgradeStrategy"`
 }
 
-// ParseYAML takes a YAML string and unmarshalls it against itself.
+// LoadYAML takes a YAML string and unmarshalls it against itself.
 // This can be applied multiple times with different YAML file to, for example,
 // load a base configuration and then load a subset of the YAML to override prod
 // configuration.
-func (t *MarathonApp) ParseYAML(yamlString string) {
+func (t *MarathonApp) LoadYAML(yamlString string) {
 	err := yaml.Unmarshal([]byte(yamlString), t)
 	if err != nil {
 		log.Fatalf("Error parsing YAML: %s", err.Error())
