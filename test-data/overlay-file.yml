@@ -1,0 +1,21 @@
+
+container:
+  volumes:
+    -
+      containerPath: /etc/prod
+      hostPath: /var/data/prod
+      mode: RO
+cpus: 4.0
+mem: 666
+instances: 4
+healthChecks:
+  -
+    protocol: HTTP
+    path: /bealth
+    gracePeriodSeconds: 1500
+    intervalSeconds: 15
+    timeoutSeconds: 5
+    maxConsecutiveFailures: 10
+labels:
+  newlabel: I am new
+  environment: prod
