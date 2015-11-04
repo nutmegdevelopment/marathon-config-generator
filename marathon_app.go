@@ -1,9 +1,7 @@
 package main
 
 import (
-	"bytes"
 	"encoding/json"
-	"fmt"
 	"log"
 
 	"gopkg.in/yaml.v2"
@@ -164,6 +162,7 @@ import (
 ],
 */
 
+/*
 // MarathonAppPortMappings represents the port mappings section of the yaml file.
 type MarathonAppPortMappings struct {
 	PortMapping MarathonAppPortMapping `yaml:"portMapping"`
@@ -200,7 +199,9 @@ func (t MarathonAppPortMappings) MarshalJSON() ([]byte, error) {
 	//jsonTemplate := `{"containerPort":%d,"hostPort":%d,"servicePort":%d,"protocol":"%s"}`
 	//return []byte(fmt.Sprintf(jsonTemplate, t.PortMapping.ContainerPort, t.PortMapping.HostPort, t.PortMapping.ServicePort, t.PortMapping.Protocol)), nil
 }
+*/
 
+/*
 // MarathonAppVolumes represents the volumes section of the yaml file.
 type MarathonAppVolumes struct {
 	Volume MarathonAppVolume `yaml:"volume"`
@@ -218,7 +219,9 @@ func (t MarathonAppVolumes) MarshalJSON() ([]byte, error) {
 	jsonTemplate := `{"containerPath":"%s","hostPath":"%s","mode":"%s"}`
 	return []byte(fmt.Sprintf(jsonTemplate, t.Volume.ContainerPath, t.Volume.HostPath, t.Volume.Mode)), nil
 }
+*/
 
+/*
 // MarathonAppHealthChecks represents the healthChecks section of the yaml file.
 type MarathonAppHealthChecks struct {
 	HealthCheck MarathonAppHealthCheck `yaml:"healthCheck"`
@@ -275,32 +278,59 @@ func AppendJSON(b *bytes.Buffer, s string) {
 	}
 	b.WriteString(s)
 }
+*/
 
 // MarathonApp represents a Marathon application configuration.
 // It inputs from yaml.
 // It outputs to JSON.
 type MarathonApp struct {
-	ID        string   `yaml:"id" json:"id"`
-	CPUs      float32  `yaml:"cpus" json:"cpus"`
-	Memory    int      `yaml:"mem" json:"mem"`
-	Instances int      `yaml:"instances" json:"instances"`
-	Args      []string `yaml:"args" json:"args"`
-	Container struct {
+	Command      string   `yaml:"cmd" json:"cmd,omitempty"`
+	RequirePorts bool     `yaml:"requirePorts,omitempty"`
+	Executor     string   `yaml:"executor,omitempty"`
+	ID           string   `yaml:"id" json:"id"`
+	CPUs         float64  `yaml:"cpus" json:"cpus"`
+	Memory       int      `yaml:"mem" json:"mem"`
+	Instances    int      `yaml:"instances" json:"instances"`
+	Args         []string `yaml:"args" json:"args"`
+	Container    struct {
 		ContainerType string `yaml:"type" json:"type"`
 		Docker        struct {
-			Image        string                    `yaml:"image" json:"image"`
-			Network      string                    `yaml:"network" json:"network"`
-			PortMappings []MarathonAppPortMappings `yaml:"portMappings" json:"portMappings"`
+			Image   string `yaml:"image" json:"image"`
+			Network string `yaml:"network" json:"network,omitempty"`
+			//PortMappings []MarathonAppPortMappings `yaml:"portMappings" json:"portMappings"`
+			PortMappings []struct {
+				ContainerPort int    `yaml:"containerPort" json:"containerPort,omitempty"`
+				HostPort      int    `yaml:"hostPort" json:"hostPort,omitempty"`
+				ServicePort   int    `yaml:"servicePort" json:"servicePort,omitempty"`
+				Protocol      string `yaml:"protocol" json:"protocol,omitempty"`
+			} `yaml:"portMappings" json:"portMappings"`
 		} `yaml:"docker" json:"docker"`
-		Volumes []MarathonAppVolumes `yaml:"volumes" json:"volumes"`
+		//Volumes      []MarathonAppVolumes `yaml:"volumes" json:"volumes"`
+		Volumes []struct {
+			ContainerPath string `yaml:"containerPath" json:"containerPath"`
+			HostPath      string `yaml:"hostPath" json:"hostPath"`
+			Mode          string `yaml:"mode" json:"mode"`
+		} `yaml:"volumes" json:"volumes"`
 	} `yaml:"container" json:"container"`
-	HealthChecks    []MarathonAppHealthChecks `yaml:"healthChecks" json:"healthChecks"`
-	Labels          map[string]string         `yaml:"labels" json:"labels"`
-	Ports           []int                     `yaml:"ports" json:"ports"`
-	UpgradeStrategy struct {
-		MinimumHealthCapacity float32 `yaml:"minimumHealthCapacity" json:"minimumHealthCapacity"`
-		MaximumOverCapacity   float32 `yaml:"maximumOverCapacity" json:"maximumOverCapacity"`
-	} `yaml:"upgradeStrategy" json:"upgradeStrategy"`
+	//HealthChecks          []MarathonAppHealthChecks `yaml:"healthChecks" json:"healthChecks,omitempty"`
+	HealthChecks []struct {
+		PortIndex              int    `yaml:"portIndex" json:"portIndex,omitempty"`
+		Protocol               string `yaml:"protocol" json:"protocol,omitempty"`
+		Path                   string `yaml:"path" json:"path,omitempty"`
+		GracePeriodSeconds     int    `yaml:"gracePeriodSeconds" json:"gracePeriodSeconds,omitempty"`
+		IntervalSeconds        int    `yaml:"intervalSeconds" json:"intervalSeconds,omitempty"`
+		TimeoutSeconds         int    `yaml:"timeoutSeconds" json:"timeoutSeconds,omitempty"`
+		MaxConsecutiveFailures int    `yaml:"maxConsecutiveFailures" json:"maxConsecutiveFailures,omitempty"`
+	} `yaml:"healthChecks" json:"healthChecks,omitempty"`
+	Labels                map[string]string `yaml:"labels" json:"labels,omitempty"`
+	Ports                 []int             `yaml:"ports" json:"ports,omitempty"`
+	BackoffSeconds        int               `yaml:"backoffSeconds" json:"backOffSeconds,omitempty"`
+	BackoffFactor         float64           `yaml:"backoffFactor" json:"backoffFactor,omitempty"`
+	MaxLaunchDelaySeconds int               `yaml:"maxLaunchDelaySeconds" json:"maxLaunchDelaySeconds,omitempty"`
+	UpgradeStrategy       struct {
+		MinimumHealthCapacity float64 `yaml:"minimumHealthCapacity" json:"minimumHealthCapacity,omitempty"`
+		MaximumOverCapacity   float64 `yaml:"maximumOverCapacity" json:"maximumOverCapacity,omitempty"`
+	} `yaml:"upgradeStrategy" json:"upgradeStrategy,omitempty"`
 }
 
 // LoadYAML takes a YAML string and unmarshalls it against itself.
