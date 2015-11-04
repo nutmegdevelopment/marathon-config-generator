@@ -116,8 +116,8 @@ import (
 type MarathonApp struct {
 	AcceptedResourceRoles []string   `yaml:"acceptedResourceRoles" json:"acceptedResourceRoles,omitempty"`
 	Args                  []string   `yaml:"args" json:"args,omitempty"`
-	BackoffSeconds        int        `yaml:"backoffSeconds" json:"backOffSeconds,omitempty"`
 	BackoffFactor         float64    `yaml:"backoffFactor" json:"backoffFactor,omitempty"`
+	BackoffSeconds        int        `yaml:"backoffSeconds" json:"backoffSeconds,omitempty"`
 	Command               string     `yaml:"cmd" json:"cmd,omitempty"`
 	Constraints           [][]string `yaml:"constraints" json:"constraints,omitempty"`
 	Container             struct {
@@ -128,14 +128,14 @@ type MarathonApp struct {
 			PortMappings []struct {
 				ContainerPort int    `yaml:"containerPort" json:"containerPort,omitempty"`
 				HostPort      int    `yaml:"hostPort" json:"hostPort,omitempty"`
-				ServicePort   int    `yaml:"servicePort" json:"servicePort,omitempty"`
 				Protocol      string `yaml:"protocol" json:"protocol,omitempty"`
+				ServicePort   int    `yaml:"servicePort" json:"servicePort,omitempty"`
 			} `yaml:"portMappings" json:"portMappings"`
-			Privileged bool `yaml:"privileged" json:"privileged,omitempty"`
+			Privileged bool `yaml:"privileged" json:"privileged"`
 			Parameters []struct {
 				Key   string `yaml:"key" json:"key,omitempty"`
 				Value string `yaml:"value" json:"value,omitempty"`
-			}
+			} `yaml:"parameters" json:"parameters"`
 		} `yaml:"docker" json:"docker"`
 		Volumes []struct {
 			ContainerPath string `yaml:"containerPath" json:"containerPath"`
@@ -146,16 +146,16 @@ type MarathonApp struct {
 	CPUs         float64           `yaml:"cpus" json:"cpus,omitempty"`
 	Dependencies []string          `yaml:"dependencies" json:"dependencies,omitempty"`
 	Environment  map[string]string `yaml:"env" json:"env,omitempty"`
-	Executor     string            `yaml:"executor,omitempty"`
+	Executor     string            `yaml:"executor" json:"executor,omitempty"`
 	HealthChecks []struct {
 		Command                map[string]string `yaml:"command" json:"command,omitempty"`
-		PortIndex              int               `yaml:"portIndex" json:"portIndex,omitempty"`
-		Protocol               string            `yaml:"protocol" json:"protocol,omitempty"`
-		Path                   string            `yaml:"path" json:"path,omitempty"`
 		GracePeriodSeconds     int               `yaml:"gracePeriodSeconds" json:"gracePeriodSeconds,omitempty"`
 		IntervalSeconds        int               `yaml:"intervalSeconds" json:"intervalSeconds,omitempty"`
-		TimeoutSeconds         int               `yaml:"timeoutSeconds" json:"timeoutSeconds,omitempty"`
 		MaxConsecutiveFailures int               `yaml:"maxConsecutiveFailures" json:"maxConsecutiveFailures,omitempty"`
+		Path                   string            `yaml:"path" json:"path,omitempty"`
+		PortIndex              int               `yaml:"portIndex" json:"portIndex,omitempty"`
+		Protocol               string            `yaml:"protocol" json:"protocol,omitempty"`
+		TimeoutSeconds         int               `yaml:"timeoutSeconds" json:"timeoutSeconds,omitempty"`
 	} `yaml:"healthChecks" json:"healthChecks,omitempty"`
 	ID                    string            `yaml:"id" json:"id"`
 	Instances             int               `yaml:"instances" json:"instances,omitempty"`
@@ -163,10 +163,10 @@ type MarathonApp struct {
 	MaxLaunchDelaySeconds int               `yaml:"maxLaunchDelaySeconds" json:"maxLaunchDelaySeconds,omitempty"`
 	Memory                int               `yaml:"mem" json:"mem,omitempty"`
 	Ports                 []int             `yaml:"ports" json:"ports,omitempty"`
-	RequirePorts          bool              `yaml:"requirePorts,omitempty"`
+	RequirePorts          bool              `yaml:"requirePorts,omitempty" json:"requirePorts"`
 	UpgradeStrategy       struct {
-		MinimumHealthCapacity float64 `yaml:"minimumHealthCapacity" json:"minimumHealthCapacity,omitempty"`
 		MaximumOverCapacity   float64 `yaml:"maximumOverCapacity" json:"maximumOverCapacity,omitempty"`
+		MinimumHealthCapacity float64 `yaml:"minimumHealthCapacity" json:"minimumHealthCapacity,omitempty"`
 	} `yaml:"upgradeStrategy" json:"upgradeStrategy,omitempty"`
 	URIs []string `yaml:"uris" json:"uris,omitempty"`
 }
