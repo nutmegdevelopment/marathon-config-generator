@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"flag"
+	"fmt"
 	"io/ioutil"
 	"log"
 )
@@ -47,7 +48,7 @@ func main() {
 	}
 
 	// Let's see what we have created!
-	log.Printf("JSON: %s", t.ToJSON())
+	fmt.Println(t.ToJSON())
 }
 
 func readFile(filename string) string {
