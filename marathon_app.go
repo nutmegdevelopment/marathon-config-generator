@@ -127,7 +127,7 @@ type MarathonApp struct {
 			Network      string `yaml:"network" json:"network,omitempty"`
 			PortMappings []struct {
 				ContainerPort int    `yaml:"containerPort" json:"containerPort,omitempty"`
-				HostPort      int    `yaml:"hostPort" json:"hostPort,omitempty"`
+				HostPort      int    `yaml:"hostPort" json:"hostPort"`
 				Protocol      string `yaml:"protocol" json:"protocol,omitempty"`
 				ServicePort   int    `yaml:"servicePort" json:"servicePort,omitempty"`
 			} `yaml:"portMappings" json:"portMappings"`
