@@ -144,3 +144,15 @@ func TestOverlayingYAML(t *testing.T) {
 	assert.Equal(t, 0.2, m.UpgradeStrategy.MaximumOverCapacity)
 	assert.Equal(t, 0.5, m.UpgradeStrategy.MinimumHealthCapacity)
 }
+
+func TestToJSON(t *testing.T) {
+	m := MarathonApp{}
+	m.LoadYAML(readFile(baseFile))
+	m.LoadYAML(readFile(overlayFile))
+
+	// Go will apparently ALWAYS return the JSON in an alphabetical order (excluding
+	// nested structs which need to be manually put into a correct order) so This
+	// shouldn't be as fragile as it may appear.
+	jsonString := `{"acceptedResourceRoles":["role1","*"],"args":["/bin/sh","-c","env \u0026\u0026 sleep 300"],"backoffFactor":1.15,"backoffSeconds":1,"cmd":"env \u0026\u0026 sleep 300","container":{"type":"DOCKER","docker":{"image":"group/image","network":"BRIDGE","portMappings":[{"containerPort":8080,"hostPort":0,"protocol":"tcp","servicePort":9000},{"containerPort":161,"hostPort":0,"protocol":"udp"}],"privileged":false,"parameters":[{"key":"a-docker-option","value":"xxx"},{"key":"b-docker-option","value":"yyy"}]},"volumes":[{"containerPath":"/etc/prod","hostPath":"/var/data/prod","mode":"RO"}]},"cpus":4,"dependencies":["/product/db/mongo","/product/db","../../db"],"env":{"LD_LIBRARY_PATH":"/usr/local/lib/myLib"},"healthChecks":[{"gracePeriodSeconds":1500,"intervalSeconds":15,"maxConsecutiveFailures":10,"path":"/bealth","protocol":"HTTP","timeoutSeconds":5}],"id":"/product/service/myApp","instances":4,"labels":{"environment":"prod","newlabel":"I am new"},"maxLaunchDelaySeconds":3600,"mem":666,"ports":[8080,9000],"requirePorts":false,"upgradeStrategy":{"maximumOverCapacity":0.2,"minimumHealthCapacity":0.5},"uris":["https://raw.github.com/mesosphere/marathon/master/README.md"]}`
+	assert.Equal(t, jsonString, m.ToJSON())
+}
