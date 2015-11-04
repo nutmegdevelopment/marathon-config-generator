@@ -94,7 +94,9 @@ import (
         },
         {
             "protocol": "COMMAND",
-            "command": { "value": "curl -f -X GET http://$HOST:$PORT0/health" },
+            "command": {
+              "value": "curl -f -X GET http://$HOST:$PORT0/health"
+            },
             "maxConsecutiveFailures": 3
         }
     ],
@@ -112,15 +114,13 @@ import (
 // It inputs from yaml.
 // It outputs to JSON.
 type MarathonApp struct {
-	Command      string   `yaml:"cmd" json:"cmd,omitempty"`
-	RequirePorts bool     `yaml:"requirePorts,omitempty"`
-	Executor     string   `yaml:"executor,omitempty"`
-	ID           string   `yaml:"id" json:"id"`
-	CPUs         float64  `yaml:"cpus" json:"cpus"`
-	Memory       int      `yaml:"mem" json:"mem"`
-	Instances    int      `yaml:"instances" json:"instances"`
-	Args         []string `yaml:"args" json:"args"`
-	Container    struct {
+	AcceptedResourceRoles []string   `yaml:"acceptedResourceRoles" json:"acceptedResourceRoles,omitempty"`
+	Args                  []string   `yaml:"args" json:"args,omitempty"`
+	BackoffSeconds        int        `yaml:"backoffSeconds" json:"backOffSeconds,omitempty"`
+	BackoffFactor         float64    `yaml:"backoffFactor" json:"backoffFactor,omitempty"`
+	Command               string     `yaml:"cmd" json:"cmd,omitempty"`
+	Constraints           [][]string `yaml:"constraints" json:"constraints,omitempty"`
+	Container             struct {
 		ContainerType string `yaml:"type" json:"type"`
 		Docker        struct {
 			Image        string `yaml:"image" json:"image"`
@@ -131,6 +131,11 @@ type MarathonApp struct {
 				ServicePort   int    `yaml:"servicePort" json:"servicePort,omitempty"`
 				Protocol      string `yaml:"protocol" json:"protocol,omitempty"`
 			} `yaml:"portMappings" json:"portMappings"`
+			Privileged bool `yaml:"privileged" json:"privileged,omitempty"`
+			Parameters []struct {
+				Key   string `yaml:"key" json:"key,omitempty"`
+				Value string `yaml:"value" json:"value,omitempty"`
+			}
 		} `yaml:"docker" json:"docker"`
 		Volumes []struct {
 			ContainerPath string `yaml:"containerPath" json:"containerPath"`
@@ -138,24 +143,32 @@ type MarathonApp struct {
 			Mode          string `yaml:"mode" json:"mode"`
 		} `yaml:"volumes" json:"volumes"`
 	} `yaml:"container" json:"container"`
+	CPUs         float64           `yaml:"cpus" json:"cpus,omitempty"`
+	Dependencies []string          `yaml:"dependencies" json:"dependencies,omitempty"`
+	Environment  map[string]string `yaml:"env" json:"env,omitempty"`
+	Executor     string            `yaml:"executor,omitempty"`
 	HealthChecks []struct {
-		PortIndex              int    `yaml:"portIndex" json:"portIndex,omitempty"`
-		Protocol               string `yaml:"protocol" json:"protocol,omitempty"`
-		Path                   string `yaml:"path" json:"path,omitempty"`
-		GracePeriodSeconds     int    `yaml:"gracePeriodSeconds" json:"gracePeriodSeconds,omitempty"`
-		IntervalSeconds        int    `yaml:"intervalSeconds" json:"intervalSeconds,omitempty"`
-		TimeoutSeconds         int    `yaml:"timeoutSeconds" json:"timeoutSeconds,omitempty"`
-		MaxConsecutiveFailures int    `yaml:"maxConsecutiveFailures" json:"maxConsecutiveFailures,omitempty"`
+		Command                map[string]string `yaml:"command" json:"command,omitempty"`
+		PortIndex              int               `yaml:"portIndex" json:"portIndex,omitempty"`
+		Protocol               string            `yaml:"protocol" json:"protocol,omitempty"`
+		Path                   string            `yaml:"path" json:"path,omitempty"`
+		GracePeriodSeconds     int               `yaml:"gracePeriodSeconds" json:"gracePeriodSeconds,omitempty"`
+		IntervalSeconds        int               `yaml:"intervalSeconds" json:"intervalSeconds,omitempty"`
+		TimeoutSeconds         int               `yaml:"timeoutSeconds" json:"timeoutSeconds,omitempty"`
+		MaxConsecutiveFailures int               `yaml:"maxConsecutiveFailures" json:"maxConsecutiveFailures,omitempty"`
 	} `yaml:"healthChecks" json:"healthChecks,omitempty"`
+	ID                    string            `yaml:"id" json:"id"`
+	Instances             int               `yaml:"instances" json:"instances,omitempty"`
 	Labels                map[string]string `yaml:"labels" json:"labels,omitempty"`
-	Ports                 []int             `yaml:"ports" json:"ports,omitempty"`
-	BackoffSeconds        int               `yaml:"backoffSeconds" json:"backOffSeconds,omitempty"`
-	BackoffFactor         float64           `yaml:"backoffFactor" json:"backoffFactor,omitempty"`
 	MaxLaunchDelaySeconds int               `yaml:"maxLaunchDelaySeconds" json:"maxLaunchDelaySeconds,omitempty"`
+	Memory                int               `yaml:"mem" json:"mem,omitempty"`
+	Ports                 []int             `yaml:"ports" json:"ports,omitempty"`
+	RequirePorts          bool              `yaml:"requirePorts,omitempty"`
 	UpgradeStrategy       struct {
 		MinimumHealthCapacity float64 `yaml:"minimumHealthCapacity" json:"minimumHealthCapacity,omitempty"`
 		MaximumOverCapacity   float64 `yaml:"maximumOverCapacity" json:"maximumOverCapacity,omitempty"`
 	} `yaml:"upgradeStrategy" json:"upgradeStrategy,omitempty"`
+	URIs []string `yaml:"uris" json:"uris,omitempty"`
 }
 
 // LoadYAML takes a YAML string and unmarshalls it against itself.
