@@ -9,11 +9,12 @@ import (
 )
 
 var (
-	templateBuffer bytes.Buffer
-	environment    string
-	verbose        bool
-	baseConfig     string
-	overlayConfig  string
+	templateBuffer  bytes.Buffer
+	environment     string
+	verbose         bool
+	baseConfig      string
+	overlayConfig   string
+	replacementVars = make(stringslice)
 )
 
 func main() {
@@ -21,6 +22,7 @@ func main() {
 	flag.StringVar(&baseConfig, "base-config", "", "the base yaml configuration.")
 	flag.StringVar(&overlayConfig, "overlay-config", "", "the yaml file configuration to be overlayed.")
 	flag.BoolVar(&verbose, "verbose", false, "verbose output.")
+	flag.Var(&replacementVars, "var", "[] of replacement variables in the form of: key=value - multiple -var flags can be used, one per key/value pair.")
 	flag.Parse()
 
 	if baseConfig == "" {
@@ -30,6 +32,7 @@ func main() {
 
 	if verbose {
 		log.Printf("Generating configuration for: %s", environment)
+		log.Printf("Vars: %v", replacementVars)
 	}
 
 	// Template filename.
