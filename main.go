@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"strings"
 )
 
 var (
@@ -50,8 +51,23 @@ func main() {
 		t.LoadYAML(overlayYAML)
 	}
 
+	// Generate the JSON string.
+	jsonString := t.ToJSON()
+
+	if verbose {
+		log.Printf("JSON before var replacement: %s", jsonString)
+	}
+
+	// Apply any replacement vars.
+	for k, v := range replacementVars {
+		if verbose {
+			log.Printf("Replacing '%s' with '%s'", k, v)
+		}
+		jsonString = strings.Replace(jsonString, k, v, -1)
+	}
+
 	// Let's see what we have created!
-	fmt.Println(t.ToJSON())
+	fmt.Println(jsonString)
 }
 
 func readFile(filename string) string {
