@@ -2,8 +2,8 @@ package main
 
 import "fmt"
 
-// Define a stringslice type to hold the key/value pairs passed in via the var
-// command line flag.
+// Define a stringslice type to hold the config-file's passed in via the
+// config-file command line flag.
 type stringslice []string
 
 // Now implement the two methods for the flag.Value interface:

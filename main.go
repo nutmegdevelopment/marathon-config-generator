@@ -20,9 +20,6 @@ var (
 )
 
 func main() {
-	//flag.StringVar(&environment, "env", "test", "the environment configuration to be generated.")
-	//flag.StringVar(&baseConfig, "base-config", "", "the base yaml configuration.")
-	//flag.StringVar(&overlayConfig, "overlay-config", "", "the yaml file configuration to be overlayed.")
 	flag.BoolVar(&verbose, "verbose", false, "verbose output.")
 	flag.Var(&replacementVars, "var", "[] of replacement variables in the form of: key=value - multiple -var flags can be used, one per key/value pair.")
 	flag.Var(&configFiles, "config-file", "[] of config files.")
@@ -39,9 +36,6 @@ func main() {
 		log.Printf("Vars: %v", replacementVars)
 	}
 
-	// Template filename.
-	//baseYAML := readFile(baseConfig)
-
 	// Create an instance of MarathonApp.
 	t := MarathonApp{}
 
@@ -52,15 +46,6 @@ func main() {
 		}
 		t.LoadYAML(readFile(f))
 	}
-
-	// Load the base YAML configuration.
-	//t.LoadYAML(baseYAML)
-
-	// Overlay the environment specific YAML configuration if specified.
-	//if overlayConfig != "" {
-	//	overlayYAML := readFile(overlayConfig)
-	//	t.LoadYAML(overlayYAML)
-	//}
 
 	// Generate the JSON string.
 	jsonString := t.ToJSON()
