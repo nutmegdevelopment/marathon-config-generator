@@ -1,17 +1,10 @@
 package main
 
-import (
-	"fmt"
-	"log"
-	"strings"
-)
+import "fmt"
 
 // Define a stringslice type to hold the key/value pairs passed in via the var
 // command line flag.
-type stringslice map[string]string
-
-// The delimeter between the key and the value.
-var varDelimeter = "="
+type stringslice []string
 
 // Now implement the two methods for the flag.Value interface:
 
@@ -21,12 +14,7 @@ func (s *stringslice) String() string {
 }
 
 // The second method is Set(value string) error
-func (s *stringslice) Set(v string) error {
-	keyvalue := strings.Split(v, varDelimeter)
-	if len(keyvalue) == 2 {
-		(*s)[keyvalue[0]] = keyvalue[1]
-	} else {
-		log.Fatalf("There were not two parts to the var: %s - the correct format is: key%svalue", v, varDelimeter)
-	}
+func (s *stringslice) Set(value string) error {
+	*s = append(*s, value)
 	return nil
 }
