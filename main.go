@@ -50,18 +50,6 @@ func main() {
 	// Generate the JSON string.
 	jsonString := t.ToJSON()
 
-	if verbose {
-		log.Printf("JSON before var replacement: %s", jsonString)
-	}
-
-	// Apply any replacement vars.
-	for k, v := range replacementVars {
-		if verbose {
-			log.Printf("Replacing '%s' with '%s'", k, v)
-		}
-		jsonString = strings.Replace(jsonString, k, v, -1)
-	}
-
 	// Let's see what we have created!
 	fmt.Println(jsonString)
 }
@@ -71,5 +59,17 @@ func readFile(filename string) string {
 	if err != nil {
 		log.Fatalf("Unable to read the file: %s", filename)
 	}
-	return string(b[:])
+	before := string(b)
+	after := before
+
+	// Apply any replacement vars.
+	for k, v := range replacementVars {
+		if verbose {
+			log.Printf("Replacing '%s' with '%s'", k, v)
+		}
+		k = fmt.Sprintf("{{%s}}", k)
+		after = strings.Replace(after, k, v, -1)
+	}
+	// TODO:  Some sort of diff output
+	return after
 }
