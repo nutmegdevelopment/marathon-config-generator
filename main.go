@@ -39,6 +39,11 @@ func main() {
 	// Create an instance of MarathonApp.
 	t := MarathonApp{}
 
+	// Set a few default values
+	t.Container.ContainerType = "DOCKER"
+	t.Container.Docker.Network = "BRIDGE"
+	t.Instances = 1
+
 	// Apply the required config files.
 	for _, f := range configFiles {
 		if verbose {
