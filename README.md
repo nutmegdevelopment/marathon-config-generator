@@ -4,7 +4,7 @@ Generates a JSON string to represent a marathon app (and soon a group) from a
 YAML definition file.
 
 Allows multiple yaml files to be provided and applied (overlayed) in order so
-that you have the ability to do the following:
+that you have the ability to:
 
 1, Apply a full base configuration.
 2, Apply an applications specific configuration over the top.
