@@ -165,8 +165,8 @@ type MarathonApp struct {
 	Ports                 []int             `yaml:"ports" json:"ports,omitempty"`
 	RequirePorts          bool              `yaml:"requirePorts,omitempty" json:"requirePorts"`
 	UpgradeStrategy       struct {
-		MaximumOverCapacity   float64 `yaml:"maximumOverCapacity" json:"maximumOverCapacity,omitempty"`
-		MinimumHealthCapacity float64 `yaml:"minimumHealthCapacity" json:"minimumHealthCapacity,omitempty"`
+		MaximumOverCapacity   *float64 `yaml:"maximumOverCapacity" json:"maximumOverCapacity,omitempty"`
+		MinimumHealthCapacity *float64 `yaml:"minimumHealthCapacity" json:"minimumHealthCapacity,omitempty"`
 	} `yaml:"upgradeStrategy" json:"upgradeStrategy,omitempty"`
 	URIs []string `yaml:"uris" json:"uris,omitempty"`
 }
