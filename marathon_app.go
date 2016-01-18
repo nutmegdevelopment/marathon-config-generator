@@ -184,7 +184,7 @@ func (t *MarathonApp) LoadYAML(yamlString string) {
 
 // ToJSON returns a JSON string representation of itself.
 func (t *MarathonApp) ToJSON() string {
-	jsonString, err := json.Marshal(t)
+	jsonString, err := json.MarshalIndent(t, "", "  ")
 	if err != nil {
 		log.Fatalf("Error marshalling JSON: %s", err.Error())
 	}
