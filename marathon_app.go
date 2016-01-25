@@ -168,7 +168,7 @@ type MarathonApp struct {
 		MaximumOverCapacity   float64 `yaml:"maximumOverCapacity" json:"maximumOverCapacity,omitempty"`
 		MinimumHealthCapacity float64 `yaml:"minimumHealthCapacity" json:"minimumHealthCapacity,omitempty"`
 	} `yaml:"upgradeStrategy" json:"upgradeStrategy,omitempty"`
-	URIs []string `yaml:"uris" json:"uris,omitempty"`
+	URIs [][]string `yaml:"uris" json:"uris,omitempty"`
 }
 
 // LoadYAML takes a YAML string and unmarshalls it against itself.
