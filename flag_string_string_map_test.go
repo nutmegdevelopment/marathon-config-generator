@@ -20,6 +20,7 @@ func TestIterateFlagStringStringMap(t *testing.T) {
 	sm.Set("CONSUL=yes")
 	sm.Set("CELERY=no")
 	sm.Set("KITTENS=nomoreplease")
+	sm.Set("EQUALS=this=that")
 
 	for k, v := range sm {
 		if k == "CONSUL" {
@@ -28,6 +29,8 @@ func TestIterateFlagStringStringMap(t *testing.T) {
 			assert.Equal(t, "no", v)
 		} else if k == "KITTENS" {
 			assert.Equal(t, "nomoreplease", v)
+		} else if k == "EQUALS" {
+			assert.Equal(t, "this=that", v)
 		}
 
 	}

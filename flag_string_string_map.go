@@ -22,7 +22,7 @@ func (s *stringmap) String() string {
 
 // The second method is Set(value string) error
 func (s *stringmap) Set(v string) error {
-	keyvalue := strings.Split(v, varDelimeter)
+	keyvalue := strings.SplitN(v, varDelimeter, 2)
 	if len(keyvalue) == 2 {
 		(*s)[keyvalue[0]] = keyvalue[1]
 	} else {
