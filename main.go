@@ -1,4 +1,4 @@
-package main
+package main // import "github.com/nutmegdevelopment/marathon-config-generator"
 
 import (
 	"bytes"
