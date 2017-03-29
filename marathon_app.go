@@ -156,6 +156,7 @@ type MarathonApp struct {
 		PortIndex              int               `yaml:"portIndex" json:"portIndex,omitempty"`
 		Protocol               string            `yaml:"protocol" json:"protocol,omitempty"`
 		TimeoutSeconds         int               `yaml:"timeoutSeconds" json:"timeoutSeconds,omitempty"`
+		Port                   int               `yaml:"port" json:"port,omitempty"`
 	} `yaml:"healthChecks" json:"healthChecks,omitempty"`
 	ID                    string            `yaml:"id" json:"id"`
 	Instances             int               `yaml:"instances" json:"instances,omitempty"`
