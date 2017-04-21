@@ -18,6 +18,10 @@ import (
         8080,
         9000
     ],
+    "portDefinitions": [
+        { "port": 8080, "protocol": "tcp", "name": "http", labels: { "VIP_0": "10.0.0.1:80" } },
+        { "port": 9000, "protocol": "tcp", "name": "admin" }
+    ],
     "requirePorts": false,
     "instances": 3,
     "executor": "",
@@ -164,8 +168,13 @@ type MarathonApp struct {
 	MaxLaunchDelaySeconds int               `yaml:"maxLaunchDelaySeconds" json:"maxLaunchDelaySeconds,omitempty"`
 	Memory                int               `yaml:"mem" json:"mem,omitempty"`
 	Ports                 []int             `yaml:"ports" json:"ports,omitempty"`
-	RequirePorts          bool              `yaml:"requirePorts,omitempty" json:"requirePorts"`
-	UpgradeStrategy       struct {
+	PortDefinitions       []struct {
+		Port     string `yaml:"port" json:"port,omitempty"`
+		Protocol string `yaml:"protocol" json:"protocol,omitempty"`
+		Name     string `yaml:"name" json:"name,omitempty"`
+	} `yaml:"portDefinitions" json:"portDefinitions,omitempty"`
+	RequirePorts    bool `yaml:"requirePorts,omitempty" json:"requirePorts"`
+	UpgradeStrategy struct {
 		MaximumOverCapacity   *float64 `yaml:"maximumOverCapacity" json:"maximumOverCapacity,omitempty"`
 		MinimumHealthCapacity *float64 `yaml:"minimumHealthCapacity" json:"minimumHealthCapacity,omitempty"`
 	} `yaml:"upgradeStrategy" json:"upgradeStrategy,omitempty"`
