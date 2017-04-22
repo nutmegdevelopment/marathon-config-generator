@@ -169,7 +169,7 @@ type MarathonApp struct {
 	Memory                int               `yaml:"mem" json:"mem,omitempty"`
 	Ports                 []int             `yaml:"ports" json:"ports,omitempty"`
 	PortDefinitions       []struct {
-		Port     string `yaml:"port" json:"port,omitempty"`
+		Port     int    `yaml:"port" json:"port,omitempty"`
 		Protocol string `yaml:"protocol" json:"protocol,omitempty"`
 		Name     string `yaml:"name" json:"name,omitempty"`
 	} `yaml:"portDefinitions" json:"portDefinitions,omitempty"`
