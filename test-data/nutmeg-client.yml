@@ -1,0 +1,60 @@
+id: story4-nutmeg-client
+cpus: 0.1
+mem: 1024
+instances: 1
+constraints:
+  -
+    - "tier"
+    - "CLUSTER"
+    - "private"
+container:
+  docker:
+    image: registry.nutmeg.co.uk:8443/nutmeg/nutmeg-client:develop_27dd691
+    network: BRIDGE
+    parameters:
+      -
+        key: "label"
+        value: "APP_NAME=story4-nutmeg-client"
+      -
+        key: "label"
+        value: "APP_BUILD=develop_27dd691"
+    portMappings:
+      -
+        containerPort: 3010
+        servicePort: null
+healthChecks:
+  -
+    protocol: HTTP
+    path: /auth/users/sign_in
+    gracePeriodSeconds: 420
+    intervalSeconds: 15
+    timeoutSeconds: 10
+    maxConsecutiveFailures: 3
+labels:
+  HAPROXY_0_GROUP: internal
+  HAPROXY_0_VHOST: story4-app.dev.nutmeg.co.uk
+  HAPROXY_0_REDIRECT_TO_HTTPS: false
+  HAPROXY_0_USE_HSTS: false
+  tags: "monitor,internal"
+env:
+  CONSUL_ENDPOINT: http://master.mesos:8500
+  NUTMEG_WEB_HOST: story4-app.dev.nutmeg.co.uk
+  NUTMEG_AUTH_SERVICE: http://story4-nutmeg-auth
+  NUTMEG_SAML_HOST: http://saml
+  NUTMEG_API_HOST: http://story4-nm-web-services
+  NUTMEG_ISA_SERVICE_HOST: http://nm-web-services-isa-transfer
+  NUTMEG_FEE_SERVICE_HOST: http://nm-fee-service
+  NUTMEG_ONBOARDING_SERVICE_HOST: http://story4-onboarding
+  NUTMEG_REPORTS_SERVICE_HOST: http://nm-reports-service
+  NUTMEG_WORKPLACE_SERVICE_HOST: http://nm-webservices-workplace-isa
+  NUTMEG_FILE_INTERFACE_SERVICE_HOST: unused
+  ACTIVE_FEATURES: 
+  API_2_ENDPOINT: https://story4-api.dev.nutmeg.co.uk
+  RAILS_ENV: development
+  PUMA_MIN_THREADS: 1
+  PUMA_MAX_THREADS: 4
+  http_proxy: http://172.17.0.1:4140
+  no_proxy: checkout.stripe.com,api.onfido.com,www.nutmeg.com,story4-api.dev.nutmeg.co.uk
+upgradeStrategy:
+  minimumHealthCapacity: 1
+  maximumOverCapacity: 0

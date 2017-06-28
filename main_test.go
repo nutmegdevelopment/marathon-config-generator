@@ -4,25 +4,28 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	models "github.com/nutmegdevelopment/marathon-golang-common"
 )
 
 var (
 	baseFile    = "test-data/base-file.yml"
 	overlayFile = "test-data/overlay-file.yml"
+	outputFile  = "test-data/output.json"
 )
 
 func TestLoadingYAML(t *testing.T) {
-	m := MarathonApp{}
+	m := models.MarathonApp{}
 	m.LoadYAML(readFile(baseFile))
 
 	// Check fields contain what they should.
 	// Verbose, but safer.
-	assert.Equal(t, "env && sleep 300", m.Command)
+	assert.Equal(t, "sleep 300", m.Command)
 	assert.Equal(t, "/product/service/myApp", m.ID)
 	assert.Equal(t, len(m.Args), 3)
-	assert.Equal(t, "env && sleep 300", m.Args[2])
+	assert.Equal(t, "sleep 300", m.Args[2])
 	assert.Equal(t, 1.5, m.CPUs)
-	assert.Equal(t, 256, m.Memory)
+	assert.Equal(t, 256.0, m.Memory)
 	assert.Equal(t, len(m.Ports), 2)
 	assert.Equal(t, 9000, m.Ports[1])
 	assert.Equal(t, false, m.RequirePorts)
@@ -31,13 +34,13 @@ func TestLoadingYAML(t *testing.T) {
 	assert.Equal(t, "DOCKER", m.Container.ContainerType)
 	assert.Equal(t, "group/image", m.Container.Docker.Image)
 	assert.Equal(t, "BRIDGE", m.Container.Docker.Network)
-	assert.Equal(t, false, m.Container.Docker.Privileged)
+	assert.Equal(t, false, *m.Container.Docker.Privileged)
 	assert.Equal(t, 2, len(m.Container.Docker.PortMappings))
 	assert.Equal(t, 8080, m.Container.Docker.PortMappings[0].ContainerPort)
-	assert.Equal(t, 0, m.Container.Docker.PortMappings[0].HostPort)
+	assert.Equal(t, 0, *m.Container.Docker.PortMappings[0].HostPort)
 	assert.Equal(t, 9000, m.Container.Docker.PortMappings[0].ServicePort)
 	assert.Equal(t, "tcp", m.Container.Docker.PortMappings[0].Protocol)
-	assert.Equal(t, false, m.Container.Docker.Privileged)
+	assert.Equal(t, false, *m.Container.Docker.Privileged)
 	assert.Equal(t, 2, len(m.Container.Docker.Parameters))
 	assert.Equal(t, "a-docker-option", m.Container.Docker.Parameters[0].Key)
 	assert.Equal(t, "xxx", m.Container.Docker.Parameters[0].Value)
@@ -79,23 +82,23 @@ func TestLoadingYAML(t *testing.T) {
 	assert.Equal(t, 1, m.BackoffSeconds)
 	assert.Equal(t, 1.15, m.BackoffFactor)
 	assert.Equal(t, 3600, m.MaxLaunchDelaySeconds)
-	assert.Equal(t, 0.2, m.UpgradeStrategy.MaximumOverCapacity)
-	assert.Equal(t, 0.5, m.UpgradeStrategy.MinimumHealthCapacity)
+	assert.Equal(t, 0.2, *m.UpgradeStrategy.MaximumOverCapacity)
+	assert.Equal(t, 0.5, *m.UpgradeStrategy.MinimumHealthCapacity)
 }
 
 func TestOverlayingYAML(t *testing.T) {
-	m := MarathonApp{}
+	m := models.MarathonApp{}
 	m.LoadYAML(readFile(baseFile))
 	m.LoadYAML(readFile(overlayFile))
 
 	// Check fields contain what they should.
 	// Verbose, but safer.
-	assert.Equal(t, "env && sleep 300", m.Command)
+	assert.Equal(t, "sleep 300", m.Command)
 	assert.Equal(t, "/product/service/myApp", m.ID)
 	assert.Equal(t, len(m.Args), 3)
-	assert.Equal(t, "env && sleep 300", m.Args[2])
+	assert.Equal(t, "sleep 300", m.Args[2])
 	assert.Equal(t, 4.0, m.CPUs)
-	assert.Equal(t, 666, m.Memory)
+	assert.Equal(t, 666.0, m.Memory)
 	assert.Equal(t, len(m.Ports), 2)
 	assert.Equal(t, 9000, m.Ports[1])
 	assert.Equal(t, false, m.RequirePorts)
@@ -104,13 +107,13 @@ func TestOverlayingYAML(t *testing.T) {
 	assert.Equal(t, "DOCKER", m.Container.ContainerType)
 	assert.Equal(t, "group/image", m.Container.Docker.Image)
 	assert.Equal(t, "BRIDGE", m.Container.Docker.Network)
-	assert.Equal(t, false, m.Container.Docker.Privileged)
+	assert.Equal(t, false, *m.Container.Docker.Privileged)
 	assert.Equal(t, 2, len(m.Container.Docker.PortMappings))
 	assert.Equal(t, 8080, m.Container.Docker.PortMappings[0].ContainerPort)
-	assert.Equal(t, 0, m.Container.Docker.PortMappings[0].HostPort)
+	assert.Equal(t, 0, *m.Container.Docker.PortMappings[0].HostPort)
 	assert.Equal(t, 9000, m.Container.Docker.PortMappings[0].ServicePort)
 	assert.Equal(t, "tcp", m.Container.Docker.PortMappings[0].Protocol)
-	assert.Equal(t, false, m.Container.Docker.Privileged)
+	assert.Equal(t, false, *m.Container.Docker.Privileged)
 	assert.Equal(t, 2, len(m.Container.Docker.Parameters))
 	assert.Equal(t, "a-docker-option", m.Container.Docker.Parameters[0].Key)
 	assert.Equal(t, "xxx", m.Container.Docker.Parameters[0].Value)
@@ -141,18 +144,42 @@ func TestOverlayingYAML(t *testing.T) {
 	assert.Equal(t, 1, m.BackoffSeconds)
 	assert.Equal(t, 1.15, m.BackoffFactor)
 	assert.Equal(t, 3600, m.MaxLaunchDelaySeconds)
-	assert.Equal(t, 0.2, m.UpgradeStrategy.MaximumOverCapacity)
-	assert.Equal(t, 0.5, m.UpgradeStrategy.MinimumHealthCapacity)
+	assert.Equal(t, 0.2, *m.UpgradeStrategy.MaximumOverCapacity)
+	assert.Equal(t, 0.5, *m.UpgradeStrategy.MinimumHealthCapacity)
 }
 
 func TestToJSON(t *testing.T) {
-	m := MarathonApp{}
+	m := models.MarathonApp{}
 	m.LoadYAML(readFile(baseFile))
 	m.LoadYAML(readFile(overlayFile))
+	o := readFile(outputFile)
 
-	// Go will apparently ALWAYS return the JSON in an alphabetical order (excluding
-	// nested structs which need to be manually put into a correct order) so This
-	// shouldn't be as fragile as it may appear.
-	jsonString := `{"acceptedResourceRoles":["role1","*"],"args":["/bin/sh","-c","env \u0026\u0026 sleep 300"],"backoffFactor":1.15,"backoffSeconds":1,"cmd":"env \u0026\u0026 sleep 300","container":{"type":"DOCKER","docker":{"image":"group/image","network":"BRIDGE","portMappings":[{"containerPort":8080,"hostPort":0,"protocol":"tcp","servicePort":9000},{"containerPort":161,"hostPort":0,"protocol":"udp"}],"privileged":false,"parameters":[{"key":"a-docker-option","value":"xxx"},{"key":"b-docker-option","value":"yyy"}]},"volumes":[{"containerPath":"/etc/prod","hostPath":"/var/data/prod","mode":"RO"}]},"cpus":4,"dependencies":["/product/db/mongo","/product/db","../../db"],"env":{"LD_LIBRARY_PATH":"/usr/local/lib/myLib"},"healthChecks":[{"gracePeriodSeconds":1500,"intervalSeconds":15,"maxConsecutiveFailures":10,"path":"/bealth","protocol":"HTTP","timeoutSeconds":5}],"id":"/product/service/myApp","instances":4,"labels":{"environment":"prod","newlabel":"I am new"},"maxLaunchDelaySeconds":3600,"mem":666,"ports":[8080,9000],"requirePorts":false,"upgradeStrategy":{"maximumOverCapacity":0.2,"minimumHealthCapacity":0.5},"uris":["https://raw.github.com/mesosphere/marathon/master/README.md"]}`
-	assert.Equal(t, jsonString, m.ToJSON())
+	assert.Equal(t, o, string(m.ToJSON()))
+}
+
+func TestExampleLinkerd(t *testing.T) {
+	m := models.MarathonApp{}
+	m.LoadYAML(DefaultYAMLDocker)
+	m.LoadYAML(readFile("test-data/linkerd.yml"))
+	o := readFile("test-data/linkerd.json")
+
+	assert.Equal(t, o, string(m.ToJSON()))
+}
+
+func TestExampleNutmegClient(t *testing.T) {
+	m := models.MarathonApp{}
+	m.LoadYAML(DefaultYAMLDocker)
+	m.LoadYAML(readFile("test-data/nutmeg-client.yml"))
+	o := readFile("test-data/nutmeg-client.json")
+
+	assert.Equal(t, o, string(m.ToJSON()))
+}
+
+func TestExampleJenkins(t *testing.T) {
+	m := models.MarathonApp{}
+	m.LoadYAML(DefaultYAMLDocker)
+	m.LoadYAML(readFile("test-data/jenkins.yml"))
+	o := readFile("test-data/jenkins.json")
+
+	assert.Equal(t, o, string(m.ToJSON()))
 }

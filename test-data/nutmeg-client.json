@@ -1,0 +1,76 @@
+{
+  "constraints": [
+    [
+      "tier",
+      "CLUSTER",
+      "private"
+    ]
+  ],
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "registry.nutmeg.co.uk:8443/nutmeg/nutmeg-client:develop_27dd691",
+      "network": "BRIDGE",
+      "portMappings": [
+        {
+          "containerPort": 3010
+        }
+      ],
+      "parameters": [
+        {
+          "key": "label",
+          "value": "APP_NAME=story4-nutmeg-client"
+        },
+        {
+          "key": "label",
+          "value": "APP_BUILD=develop_27dd691"
+        }
+      ]
+    }
+  },
+  "cpus": 0.1,
+  "env": {
+    "ACTIVE_FEATURES": "",
+    "API_2_ENDPOINT": "https://story4-api.dev.nutmeg.co.uk",
+    "CONSUL_ENDPOINT": "http://master.mesos:8500",
+    "NUTMEG_API_HOST": "http://story4-nm-web-services",
+    "NUTMEG_AUTH_SERVICE": "http://story4-nutmeg-auth",
+    "NUTMEG_FEE_SERVICE_HOST": "http://nm-fee-service",
+    "NUTMEG_FILE_INTERFACE_SERVICE_HOST": "unused",
+    "NUTMEG_ISA_SERVICE_HOST": "http://nm-web-services-isa-transfer",
+    "NUTMEG_ONBOARDING_SERVICE_HOST": "http://story4-onboarding",
+    "NUTMEG_REPORTS_SERVICE_HOST": "http://nm-reports-service",
+    "NUTMEG_SAML_HOST": "http://saml",
+    "NUTMEG_WEB_HOST": "story4-app.dev.nutmeg.co.uk",
+    "NUTMEG_WORKPLACE_SERVICE_HOST": "http://nm-webservices-workplace-isa",
+    "PUMA_MAX_THREADS": "4",
+    "PUMA_MIN_THREADS": "1",
+    "RAILS_ENV": "development",
+    "http_proxy": "http://172.17.0.1:4140",
+    "no_proxy": "checkout.stripe.com,api.onfido.com,www.nutmeg.com,story4-api.dev.nutmeg.co.uk"
+  },
+  "healthChecks": [
+    {
+      "gracePeriodSeconds": 420,
+      "intervalSeconds": 15,
+      "maxConsecutiveFailures": 3,
+      "path": "/auth/users/sign_in",
+      "protocol": "HTTP",
+      "timeoutSeconds": 10
+    }
+  ],
+  "id": "story4-nutmeg-client",
+  "instances": 1,
+  "labels": {
+    "HAPROXY_0_GROUP": "internal",
+    "HAPROXY_0_REDIRECT_TO_HTTPS": "false",
+    "HAPROXY_0_USE_HSTS": "false",
+    "HAPROXY_0_VHOST": "story4-app.dev.nutmeg.co.uk",
+    "tags": "monitor,internal"
+  },
+  "mem": 1024,
+  "upgradeStrategy": {
+    "maximumOverCapacity": 0,
+    "minimumHealthCapacity": 1
+  }
+}

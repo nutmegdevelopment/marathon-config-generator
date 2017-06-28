@@ -1,0 +1,67 @@
+{
+  "args": [
+    "/io.buoyant/linkerd/linkerd.yaml"
+  ],
+  "constraints": [
+    [
+      "hostname",
+      "UNIQUE"
+    ]
+  ],
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "registry.nutmeg.co.uk:8443/linkerd:0.0.8",
+      "network": "HOST",
+      "parameters": [
+        {
+          "key": "label",
+          "value": "APP_NAME=linkerd"
+        },
+        {
+          "key": "label",
+          "value": "APP_BUILD=0.0.8"
+        }
+      ]
+    }
+  },
+  "cpus": 0.01,
+  "healthChecks": [
+    {
+      "gracePeriodSeconds": 300,
+      "intervalSeconds": 8,
+      "maxConsecutiveFailures": 3,
+      "path": "/admin/ping",
+      "port": 9990,
+      "protocol": "HTTP",
+      "timeoutSeconds": 3
+    }
+  ],
+  "id": "/linkerd",
+  "instances": 29,
+  "labels": {
+    "daemonset": "all"
+  },
+  "mem": 256,
+  "portDefinitions": [
+    {
+      "name": "linkerd-outgoing",
+      "port": 4140,
+      "protocol": "tcp"
+    },
+    {
+      "name": "linkerd-incoming",
+      "port": 4141,
+      "protocol": "tcp"
+    },
+    {
+      "name": "linkerd-monitor",
+      "port": 9990,
+      "protocol": "tcp"
+    }
+  ],
+  "upgradeStrategy": {
+    "maximumOverCapacity": 0,
+    "minimumHealthCapacity": 1
+  }
+}

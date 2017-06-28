@@ -1,0 +1,49 @@
+id: /linkerd
+cpus: 0.01
+mem: 256
+instances: 29
+constraints:
+  -
+    - "hostname"
+    - "UNIQUE"
+args: [
+  "/io.buoyant/linkerd/linkerd.yaml"
+]
+container:
+  docker:
+    image: registry.nutmeg.co.uk:8443/linkerd:0.0.8
+    network: HOST
+    parameters:
+      -
+        key: "label"
+        value: "APP_NAME=linkerd"
+      -
+        key: "label"
+        value: "APP_BUILD=0.0.8"
+labels:
+  daemonset: all
+portDefinitions:
+  -
+    port: 4140
+    protocol: tcp
+    name: linkerd-outgoing
+  -
+    port: 4141
+    protocol: tcp
+    name: linkerd-incoming
+  -
+    port: 9990
+    protocol: tcp
+    name: linkerd-monitor
+healthChecks:
+  -
+    protocol: HTTP
+    port: 9990
+    path: /admin/ping
+    gracePeriodSeconds: 300
+    intervalSeconds: 8
+    timeoutSeconds: 3
+    maxConsecutiveFailures: 3
+upgradeStrategy:
+  minimumHealthCapacity: 1
+  maximumOverCapacity: 0
