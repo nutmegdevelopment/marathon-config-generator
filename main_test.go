@@ -157,29 +157,29 @@ func TestToJSON(t *testing.T) {
 	assert.Equal(t, o, string(m.ToJSON()))
 }
 
-func TestExampleLinkerd(t *testing.T) {
+func TestExampleOne(t *testing.T) {
 	m := models.MarathonApp{}
 	m.LoadYAML(DefaultYAMLDocker)
-	m.LoadYAML(readFile("test-data/linkerd.yml"))
-	o := readFile("test-data/linkerd.json")
+	m.LoadYAML(readFile("test-data/example-1.yml"))
+	o := readFile("test-data/example-1.json")
 
 	assert.Equal(t, o, string(m.ToJSON()))
 }
 
-func TestExampleNutmegClient(t *testing.T) {
+func TestExampleTwo(t *testing.T) {
 	m := models.MarathonApp{}
 	m.LoadYAML(DefaultYAMLDocker)
-	m.LoadYAML(readFile("test-data/nutmeg-client.yml"))
-	o := readFile("test-data/nutmeg-client.json")
+	m.LoadYAML(readFile("test-data/example-2.yml"))
+	o := readFile("test-data/example-2.json")
 
 	assert.Equal(t, o, string(m.ToJSON()))
 }
 
-func TestExampleJenkins(t *testing.T) {
+func TestExampleThree(t *testing.T) {
 	m := models.MarathonApp{}
 	m.LoadYAML(DefaultYAMLDocker)
-	m.LoadYAML(readFile("test-data/jenkins.yml"))
-	o := readFile("test-data/jenkins.json")
+	m.LoadYAML(readFile("test-data/example-3.yml"))
+	o := readFile("test-data/example-3.json")
 
 	assert.Equal(t, o, string(m.ToJSON()))
 }

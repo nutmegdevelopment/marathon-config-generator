@@ -1,0 +1,55 @@
+{
+  "constraints": [
+    [
+      "bot",
+      "CLUSTER",
+      "sgtbash"
+    ]
+  ],
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "image2:1.0.2",
+      "network": "BRIDGE",
+      "portMappings": [
+        {
+          "containerPort": 1234
+        }
+      ],
+      "parameters": [
+        {
+          "key": "key1",
+          "value": "value1"
+        },
+        {
+          "key": "key2",
+          "value": "value2"
+        }
+      ]
+    }
+  },
+  "cpus": 0.1,
+  "env": {
+    "ENV_NAME": "env_value"
+  },
+  "healthChecks": [
+    {
+      "gracePeriodSeconds": 420,
+      "intervalSeconds": 15,
+      "maxConsecutiveFailures": 3,
+      "path": "/health",
+      "protocol": "HTTP",
+      "timeoutSeconds": 10
+    }
+  ],
+  "id": "example-2",
+  "instances": 1,
+  "labels": {
+    "label-name": "label-value"
+  },
+  "mem": 1024,
+  "upgradeStrategy": {
+    "maximumOverCapacity": 0,
+    "minimumHealthCapacity": 1
+  }
+}

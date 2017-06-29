@@ -1,45 +1,42 @@
-id: /linkerd
+id: /example-1
 cpus: 0.01
 mem: 256
-instances: 29
+instances: 42
 constraints:
   -
     - "hostname"
     - "UNIQUE"
 args: [
-  "/io.buoyant/linkerd/linkerd.yaml"
+  "/config.yml"
 ]
 container:
   docker:
-    image: registry.nutmeg.co.uk:8443/linkerd:0.0.8
+    image: example-1-image:0.0.1
     network: HOST
     parameters:
       -
         key: "label"
-        value: "APP_NAME=linkerd"
-      -
-        key: "label"
-        value: "APP_BUILD=0.0.8"
+        value: "fable"
 labels:
   daemonset: all
 portDefinitions:
   -
-    port: 4140
+    port: 1234
     protocol: tcp
-    name: linkerd-outgoing
+    name: example-1-outgoing
   -
-    port: 4141
+    port: 2345
     protocol: tcp
-    name: linkerd-incoming
+    name: example-1-incoming
   -
-    port: 9990
+    port: 3456
     protocol: tcp
-    name: linkerd-monitor
+    name: example-1-monitor
 healthChecks:
   -
     protocol: HTTP
-    port: 9990
-    path: /admin/ping
+    port: 1234
+    path: /path/to/health/check
     gracePeriodSeconds: 300
     intervalSeconds: 8
     timeoutSeconds: 3
