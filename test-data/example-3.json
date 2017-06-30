@@ -1,0 +1,64 @@
+{
+  "constraints": [
+    [
+      "metaname",
+      "CLUSTER",
+      "metavalue"
+    ],
+    [
+      "rack",
+      "CLUSTER",
+      "rackname"
+    ]
+  ],
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "my/image:1.0.0",
+      "network": "BRIDGE",
+      "portMappings": [
+        {
+          "containerPort": 8080,
+          "hostPort": 40001
+        },
+        {
+          "containerPort": 8081,
+          "hostPort": 40002
+        }
+      ],
+      "parameters": [
+        {
+          "key": "label",
+          "value": "label-value"
+        }
+      ]
+    }
+  },
+  "cpus": 1,
+  "env": {
+    "JAVA_OPTS": "-Xmx2560m -Xms2560m",
+    "JAVA_PORT": "8080"
+  },
+  "healthChecks": [
+    {
+      "gracePeriodSeconds": 180,
+      "intervalSeconds": 10,
+      "maxConsecutiveFailures": 3,
+      "path": "/metrics",
+      "protocol": "HTTPS",
+      "timeoutSeconds": 20
+    }
+  ],
+  "id": "example-3",
+  "instances": 1,
+  "labels": {
+    "HAPROXY_0_VHOST": "example-3.local",
+    "HAPROXY_GROUP": "groupname",
+    "environment": "envname"
+  },
+  "mem": 4000,
+  "upgradeStrategy": {
+    "maximumOverCapacity": 0,
+    "minimumHealthCapacity": 0
+  }
+}
