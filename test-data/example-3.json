@@ -50,7 +50,7 @@
     }
   ],
   "id": "example-3",
-  "instances": 1,
+  "instances": 0,
   "labels": {
     "HAPROXY_0_VHOST": "example-3.local",
     "HAPROXY_GROUP": "groupname",

@@ -279,6 +279,30 @@ func TestMarathonAppContainerDockerFull(t *testing.T) {
 	assert.Equal(t, MarathonAppContainerDockerTestJSON, string(b))
 }
 
+func TestMarathonAppInstancesZero(t *testing.T) {
+	m := MarathonApp{}
+	instances := 0
+	m.Instances = &instances
+
+	b, err := json.Marshal(m)
+	if err != nil {
+		fmt.Println("error:", err)
+	}
+	assert.Equal(t, `{"instances":0}`, string(b))
+}
+
+func TestMarathonAppInstancesNonZero(t *testing.T) {
+	m := MarathonApp{}
+	instances := 3
+	m.Instances = &instances
+
+	b, err := json.Marshal(m)
+	if err != nil {
+		fmt.Println("error:", err)
+	}
+	assert.Equal(t, `{"instances":3}`, string(b))
+}
+
 func TestMarathonAppContainerEmpty(t *testing.T) {
 	m := MarathonAppContainer{}
 

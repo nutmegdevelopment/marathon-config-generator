@@ -26,7 +26,7 @@ type MarathonApp struct {
 	ID                         string                      `yaml:"id" json:"id,omitempty"`
 	IPAddress                  *MarathonAppIPAddress       `json:"ipAddress,omitempty"`
 	OriginalID                 string                      `json:"-"`
-	Instances                  int                         `yaml:"instances" json:"instances,omitempty"`
+	Instances                  *int                        `yaml:"instances" json:"instances,omitempty"`
 	Labels                     map[string]string           `yaml:"labels" json:"labels,omitempty"`
 	MaxLaunchDelaySeconds      int                         `yaml:"maxLaunchDelaySeconds" json:"maxLaunchDelaySeconds,omitempty"`
 	Memory                     float64                     `yaml:"mem" json:"mem,omitempty"`

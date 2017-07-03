@@ -8,10 +8,9 @@
   version = "v1.1.0"
 
 [[projects]]
-  branch = "master"
   name = "github.com/nutmegdevelopment/marathon-golang-common"
   packages = ["."]
-  revision = "469d9256103e78515a4e5b9afb3aeb7b1510e01c"
+  revision = "31bc0bd9f8f389c4a34059122a917ae97d505471"
 
 [[projects]]
   name = "github.com/pmezard/go-difflib"
@@ -34,6 +33,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "001834280397d6d7581b8e670f20052f13fddd6fa8b7221209416660abc4e714"
+  inputs-digest = "0a0653206676ff19fbcc2d405e147660206e7f3ef690ac38d3a744b7015b8bec"
   solver-name = "gps-cdcl"
   solver-version = 1

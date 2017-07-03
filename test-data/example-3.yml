@@ -1,7 +1,7 @@
 id: example-3
 cpus: 1.0
 mem: 4000
-instances: 1
+instances: 0
 env:
   JAVA_OPTS: "-Xmx2560m -Xms2560m"
   JAVA_PORT: 8080
