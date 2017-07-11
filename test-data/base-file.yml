@@ -3,11 +3,11 @@
 # See: test-data/marathon-full-example.json
 # Amend from the provided JSON was to add a missing trailing comma on line 4.
 id: /product/service/myApp
-cmd: env && sleep 300
+cmd: sleep 300
 args:
   - /bin/sh
   - -c
-  - env && sleep 300
+  - sleep 300
 cpus: 1.5
 mem: 256.0
 ports:
@@ -67,7 +67,7 @@ healthChecks:
     path: /health
     gracePeriodSeconds: 3
     intervalSeconds: 10
-    portIndex: 0
+    port: 12345
     timeoutSeconds: 10
     maxConsecutiveFailures: 3
   -

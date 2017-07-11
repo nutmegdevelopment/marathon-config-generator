@@ -7,7 +7,18 @@ import (
 	"io/ioutil"
 	"log"
 	"strings"
+
+	models "github.com/nutmegdevelopment/marathon-golang-common"
 )
+
+// DefaultYAMLDocker is...
+const DefaultYAMLDocker = `
+container:
+  type: DOCKER
+  docker:
+    network: BRIDGE
+instances: 1
+`
 
 var (
 	templateBuffer  bytes.Buffer
@@ -15,6 +26,7 @@ var (
 	verbose         bool
 	baseConfig      string
 	overlayConfig   string
+	useDefaults     bool
 	replacementVars = make(stringmap)
 	configFiles     stringslice
 )
@@ -23,6 +35,7 @@ func main() {
 	flag.BoolVar(&verbose, "verbose", false, "verbose output.")
 	flag.Var(&replacementVars, "var", "[] of replacement variables in the form of: key=value - multiple -var flags can be used, one per key/value pair.")
 	flag.Var(&configFiles, "config-file", "[] of config files.")
+	flag.BoolVar(&useDefaults, "use-defaults", true, "Use default settings for Docker containers")
 	flag.Parse()
 
 	if len(configFiles) < 1 {
@@ -37,12 +50,10 @@ func main() {
 	}
 
 	// Create an instance of MarathonApp.
-	t := MarathonApp{}
+	t := models.MarathonApp{}
 
-	// Set a few default values
-	t.Container.ContainerType = "DOCKER"
-	t.Container.Docker.Network = "BRIDGE"
-	t.Instances = 1
+	// Apply the default Docker YAML.
+	t.LoadYAML(DefaultYAMLDocker)
 
 	// Apply the required config files.
 	for _, f := range configFiles {
@@ -56,7 +67,7 @@ func main() {
 	jsonString := t.ToJSON()
 
 	// Let's see what we have created!
-	fmt.Println(jsonString)
+	fmt.Println(string(jsonString))
 }
 
 func readFile(filename string) string {
