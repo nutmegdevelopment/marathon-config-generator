@@ -39,18 +39,18 @@ type MarathonApp struct {
 }
 
 type MarathonAppContainer struct {
-	ContainerType  string                       `yaml:"type" json:"type,omitempty"`
-	Docker         *MarathonAppContainerDocker  `yaml:"docker" json:"docker,omitempty"`
-	ForcePullImage bool                         `yaml:"forcePullImage" json:"forcePullImage,omitempty"`
-	Volumes        []MarathonAppContainerVolume `yaml:"volumes" json:"volumes,omitempty"`
+	ContainerType string                       `yaml:"type" json:"type,omitempty"`
+	Docker        *MarathonAppContainerDocker  `yaml:"docker" json:"docker,omitempty"`
+	Volumes       []MarathonAppContainerVolume `yaml:"volumes" json:"volumes,omitempty"`
 }
 
 type MarathonAppContainerDocker struct {
-	Image        string                                   `yaml:"image" json:"image,omitempty"`
-	Network      string                                   `yaml:"network" json:"network,omitempty"`
-	PortMappings []MarathonAppContainerDockerPortMappings `yaml:"portMappings" json:"portMappings,omitempty"`
-	Privileged   *bool                                    `yaml:"privileged" json:"privileged,omitempty"`
-	Parameters   []MarathonAppContainerDockerParameters   `yaml:"parameters" json:"parameters,omitempty"`
+	Image          string                                   `yaml:"image" json:"image,omitempty"`
+	Network        string                                   `yaml:"network" json:"network,omitempty"`
+	PortMappings   []MarathonAppContainerDockerPortMappings `yaml:"portMappings" json:"portMappings,omitempty"`
+	Privileged     *bool                                    `yaml:"privileged" json:"privileged,omitempty"`
+	Parameters     []MarathonAppContainerDockerParameters   `yaml:"parameters" json:"parameters,omitempty"`
+	ForcePullImage bool                                     `yaml:"forcePullImage" json:"forcePullImage,omitempty"`
 }
 
 type MarathonAppContainerDockerPortMappings struct {

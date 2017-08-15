@@ -22,8 +22,8 @@ const (
 	MarathonAppFetchTrueTestJSON                   = `{"uri":"http://b3ta.com","extract":true,"executable":true,"cache":true}`
 	MarathonAppContainerVolumeTestJSON             = `{"containerPath":"container-path","hostPath":"host-path","mode":"mode"}`
 	MarathonAppContainerDockerPortMappingsTestJSON = `{"containerPort":8080,"hostPort":31001,"protocol":"HTTP","servicePort":15001}`
-	MarathonAppContainerDockerTestJSON             = `{"image":"registry.nutmeg.co.uk:8443/...","network":"BRIDGE","portMappings":[{"containerPort":8080,"hostPort":31001,"protocol":"HTTP","servicePort":15001},{}],"privileged":false,"parameters":[{"key":"key1","value":"value1"},{"key":"key2","value":"value2"}]}`
-	MarathonAppContainerTestJSON                   = `{"type":"DOCKER","forcePullImage":true}`
+	MarathonAppContainerDockerTestJSON             = `{"image":"registry.nutmeg.co.uk:8443/...","network":"BRIDGE","portMappings":[{"containerPort":8080,"hostPort":31001,"protocol":"HTTP","servicePort":15001},{}],"privileged":false,"parameters":[{"key":"key1","value":"value1"},{"key":"key2","value":"value2"}],"forcePullImage":true}`
+	MarathonAppContainerTestJSON                   = `{"type":"DOCKER"}`
 )
 
 func TestMinimumOutput(t *testing.T) {
@@ -256,6 +256,7 @@ func TestMarathonAppContainerDockerFull(t *testing.T) {
 	m := MarathonAppContainerDocker{}
 	m.Image = "registry.nutmeg.co.uk:8443/..."
 	m.Network = "BRIDGE"
+	m.ForcePullImage = true
 	macdp := make([]MarathonAppContainerDockerParameters, 2)
 	macdp[0].Key = "key1"
 	macdp[0].Value = "value1"
@@ -316,7 +317,6 @@ func TestMarathonAppContainerEmpty(t *testing.T) {
 func TestMarathonAppContainerFull(t *testing.T) {
 	m := MarathonAppContainer{}
 	m.ContainerType = "DOCKER"
-	m.ForcePullImage = true
 
 	b, err := json.Marshal(m)
 	if err != nil {
