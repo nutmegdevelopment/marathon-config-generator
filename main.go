@@ -18,6 +18,8 @@ container:
   docker:
     network: BRIDGE
 instances: 1
+env: 
+  DOCKER_API_VERSION: "1.21"
 `
 
 var (
