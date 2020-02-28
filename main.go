@@ -21,7 +21,7 @@ instances: 1
 env: 
   DOCKER_API_VERSION: "1.21"
   VAULT_SKIP_VERIFY: "true"
-  VAULT_CA_PATH: ""
+  VAULT_CA_PATH: "/tmp"
 `
 
 var (
